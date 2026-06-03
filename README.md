@@ -61,6 +61,7 @@ The source database consists of **5 tables** holding weekly sales of cleaning pr
 
 ### 1. Data Cleaning and Transformation (Python)
 **Path:** `1-Limpieza-y-Transformación-de-Datos/`
+
 **Notebook:** `EBAC Proyecto Parte 1 - Limpieza de Datos.ipynb`
 - Loading data from CSV and Excel into multiple DataFrames
 - Handling missing value and removing duplicates
@@ -69,6 +70,7 @@ The source database consists of **5 tables** holding weekly sales of cleaning pr
 
 ### 2. Exploratory Data Analysis (EDA)
 **Path:** `2-Visualización-y-Analisis-Exploratorio-de-Datos/`
+
 **Notebook:** `Proyecto con Empresa Aliada Parte 2 - Visualización de datos.ipynb`
 - Scatter plots validating the relationship between unit, value, and historical sales
 - Boxplots and bar charts by segment, region, and brand
@@ -77,6 +79,7 @@ The source database consists of **5 tables** holding weekly sales of cleaning pr
 
 ### 3. Segmentation with Clustering (K-Means)
 **Path:** `3-Aprendizaje-no-supervizado-KMeans/`
+
 **Notebook:** `EBAC Proyecto Parte 3 - Clustering con K-Means.ipynb`
 - Feature selection (unit sales, historical sales, date-as-integer; Region and Format as balanced categoricals, with formats merged into a `SOLIDO` category in order to avoid overcomplexity in the model)
 - Optimal `k` chosen via the elbow method and silhouette score (**k = 8**)
@@ -84,6 +87,7 @@ The source database consists of **5 tables** holding weekly sales of cleaning pr
 
 ### 4. Relational Analysis (SQL)
 **Path:** `4-Creacion-de-base-de-datos-SQL/`
+
 **Report:** `Reporte Proyecto con empresa aliada - Parte 4 SQL.pdf`
 - Creation of 5 relational tables and a consolidated view via inner joins
 - Sales statistics by format, region, segment, and brand
@@ -91,6 +95,7 @@ The source database consists of **5 tables** holding weekly sales of cleaning pr
 
 ### 5. Power BI Dashboard
 **Path:** `5-Dashboard-interactivo-con-Power-BI/`
+
 **Report:** `Reporte Proyecto con empresa aliada - Parte 5 Power BI.pdf`
 Five interactive pages with slicers, bookmarks, drill-downs, and tooltips:
 - Sales Summary
@@ -101,6 +106,7 @@ Five interactive pages with slicers, bookmarks, drill-downs, and tooltips:
 
 ### 6. Sales Forecasting (ARIMA)
 **Path:** `6-Pronóstico-de-Ventas-con-ARIMA/`
+
 **Notebook:** `EBAC Proyecto Parte 6 - Pronóstico de ventas de Vanish & Lysol.ipynb`
 - Stationarity check (first differencing, `d = 1`) and PACF analysis
 - Hyperparameter search by AIC → best model **ARIMA(4, 1, 3)**

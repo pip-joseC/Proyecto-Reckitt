@@ -14,6 +14,8 @@ The project covers:
 - Interactive dashboarding (Power BI)
 - Sales forecasting with time series models (ARIMA)
 
+A more in detail explanation and sumamry of the project can be found in the file `Presentación Final - Proyecto Ciencia de Datos para Reckitt.pdf` as a presentation.
+
 ---
 
 ## Business Context

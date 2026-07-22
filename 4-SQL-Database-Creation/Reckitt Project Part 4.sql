@@ -1,118 +1,118 @@
-/******************************** CREACIÓN DE LAS TABLAS ********************************/
+/******************************** TABLE CREATION ********************************/
 
--- Creando la tabla de categorías (category)
+-- Creating the category table
 CREATE TABLE category (
-    [IdCategory] TINYINT, --IdCategory son enteros del 1 al 5, un TINYINT es suficiente
-    [Category] VARCHAR(100) --Aquí se guarda el significado de cada Id en forma de cadenas de texto
+    [IdCategory] TINYINT, --IdCategory are integers from 1 to 5, a TINYINT is sufficient
+    [Category] VARCHAR(100) --This stores the meaning of each Id as text strings
 )
 
--- Creando la tabla del calendario (calendar)
+-- Creating the calendar table
 CREATE TABLE calendar (
-    [Week] VARCHAR(10), --Identificadores cortos de cada semana 
-    [Year] INT, --Año correspondiente, en forma de entero 
-    [Month] TINYINT, --Mes correspondiente, identificado por su número de mes del 1 al 12
-    [WeekNumber] TINYINT, --Número de la semana de ese año, va del 1 a 52
-    [Date] DATE --Fecha completa del primer día de la semana correspondiente
+    [Week] VARCHAR(10), --Short identifiers for each week 
+    [Year] INT, --Corresponding year, as an integer 
+    [Month] TINYINT, --Corresponding month, identified by its month number from 1 to 12
+    [WeekNumber] TINYINT, --Week number of that year, ranges from 1 to 52
+    [Date] DATE --Full date of the first day of the corresponding week
 )
 
--- Creando la tabla de segmentos (segments)
+-- Creating the segments table
 CREATE TABLE segments (
-    [Category] TINYINT, --Entero identificador de la categoría
-    [Attr1] VARCHAR(30), --Primer atributo, guardado como texto
-    [Attr2] VARCHAR(30), --Segundo atributo, guardado como texto
-    [Attr3] VARCHAR(30), --Tercer atributo, guardado como texto
-    [Format] VARCHAR(30), --Nombre del formato/presentación, guardado como texto
-    [Segment] VARCHAR(30) --Nombre del segmento correspondiente, guardado como texto
+    [Category] TINYINT, --Integer identifier for the category
+    [Attr1] VARCHAR(30), --First attribute, stored as text
+    [Attr2] VARCHAR(30), --Second attribute, stored as text
+    [Attr3] VARCHAR(30), --Third attribute, stored as text
+    [Format] VARCHAR(30), --Format/presentation name, stored as text
+    [Segment] VARCHAR(30) --Corresponding segment name, stored as text
 )
 
--- Creando la tabla de productos (products)
+-- Creating the products table
 CREATE TABLE products (
-    [Manufacturer] VARCHAR(100), --Nombre del manufacturero, guardado como texto
-    [Brand] VARCHAR(100), --Nombre de la marca, guardado como texto
-    [Item] VARCHAR(100), --Identificador alfanumérico del producto
-    [ItemDescription] VARCHAR(255), --Descripción del producto, guardado como un texto largo
-    [Category] TINYINT, --Entero identificador de la categoría
-    [Format] VARCHAR(30), --Nombre del formato/presentación, guardado como texto
-    [Attr1] VARCHAR(30), --Primer atributo, guardado como texto
-    [Attr2] VARCHAR(30), --Segundo atributo, guardado como texto
-    [Attr3] VARCHAR(30), --Tercer atributo, guardado como texto
+    [Manufacturer] VARCHAR(100), --Manufacturer name, stored as text
+    [Brand] VARCHAR(100), --Brand name, stored as text
+    [Item] VARCHAR(100), --Alphanumeric product identifier
+    [ItemDescription] VARCHAR(255), --Product description, stored as a long text
+    [Category] TINYINT, --Integer identifier for the category
+    [Format] VARCHAR(30), --Format/presentation name, stored as text
+    [Attr1] VARCHAR(30), --First attribute, stored as text
+    [Attr2] VARCHAR(30), --Second attribute, stored as text
+    [Attr3] VARCHAR(30), --Third attribute, stored as text
 )
 
--- Creando la tabla de ventas (sales)
+-- Creating the sales table
 CREATE TABLE sales (
-    [Week] VARCHAR(10), --Identificadores cortos de cada semana de la venta
-    [ItemCode] VARCHAR(100), --Identificador alfanumérico del producto vendido
-    [TotalUnitSales] DECIMAL(8,3), --Cantidad decimal que mide las ventas unitarias de esa semana
-    [TotalValueSales] DECIMAL(8,3), --Cantidad decimal que mide las ventas monetarias de esa semana
-    [TotalUnitAvgWeeklySales] DECIMAL(8,3), --Cantidad que mide el rendimiento histórico promedio del producto
-    [Region] VARCHAR(100) --Region en la que se hizo la venta, guardada como texto
+    [Week] VARCHAR(10), --Short identifiers for each sales week
+    [ItemCode] VARCHAR(100), --Alphanumeric identifier of the sold product
+    [TotalUnitSales] DECIMAL(8,3), --Decimal quantity measuring unit sales for that week
+    [TotalValueSales] DECIMAL(8,3), --Decimal quantity measuring monetary sales for that week
+    [TotalUnitAvgWeeklySales] DECIMAL(8,3), --Quantity measuring the product's average historical performance
+    [Region] VARCHAR(100) --Region where the sale was made, stored as text
 )
 
-/******************************** IMPORTANDO LOS DATOS ********************************/
+/******************************** IMPORTING THE DATA ********************************/
 
--- Importar el archivo CSV
+-- Import the CSV file
 BULK INSERT category
---Ruta del archivo: esta debe de cambairse si se requiere reproducibilidad
+--File path: this must be changed if reproducibility is required
 FROM 'C:\Users\sorak\Proyecto Reckitt\DIM_CATEGORY.csv'
 WITH (
-    FORMAT='CSV', -- Especificamos que el formato es CSV
-    FIRSTROW = 2  -- Saltar el encabezado, empezará en la segunda fila
+    FORMAT='CSV', -- Specifying that the format is CSV
+    FIRSTROW = 2  -- Skip the header, it will start on the second row
 );
 
 SELECT * 
 FROM category
 
--- Importar el archivo CSV, pero ahora para las ventas
+-- Import the CSV file, now for sales
 BULK INSERT sales
---Ruta del archivo: esta debe de cambairse si se requiere reproducibilidad
+--File path: this must be changed if reproducibility is required
 FROM 'C:\Users\sorak\Proyecto Reckitt\FACT_SALES.csv'
 WITH (
-    FORMAT='CSV', -- Especificamos que el formato es CSV
-    FIRSTROW = 2  -- Saltar el encabezado, empezará en la segunda fila
+    FORMAT='CSV', -- Specifying that the format is CSV
+    FIRSTROW = 2  -- Skip the header, it will start on the second row
 );
 
 SELECT * 
 FROM sales
 
--- LAS DEMÁS TABLAS FUERON IMPORTADAS CON LA HERRAMIENTA DE SSMS PARA IMPORTAR ARCHIVOS DE EXCEL
+-- THE REMAINING TABLES WERE IMPORTED USING THE SSMS TOOL FOR IMPORTING EXCEL FILES
 
---Correción para evitar errores en el Asistente de importación de datos (requerirá convertir formato después)
+--Correction to avoid errors in the Data Import Wizard (will require converting the format afterward)
 ALTER TABLE calendar
 ALTER COLUMN [Date] VARCHAR(10);
---Después, se tiene que importar la tabla de calendar otra vez y ya debería de funcionar
+--Afterward, the calendar table needs to be imported again and it should work
 
---Visualizando los datos ya insertados en la tabla calendar
+--Viewing the data already inserted into the calendar table
 SELECT * 
 FROM calendar
 
---FALTA: Convertir el campo de "Date" de VARCHAR a DATE
---Agregando una nueva columna con tipo de dato DATE
+--PENDING: Convert the "Date" field from VARCHAR to DATE
+--Adding a new column with data type DATE
 ALTER TABLE calendar ADD ValidDate DATE;
---Actualizando los registros de este campo con los registros tipo VARCHAR convertidos a DATE
+--Updating the records of this field with the VARCHAR records converted to DATE
 UPDATE calendar
-SET ValidDate = CONVERT(DATE,[Date],103); --El formato 103 es el formato de fecha DD/MM/YYYY
---Eliminando el campo con las fechas en VARCHAR
+SET ValidDate = CONVERT(DATE,[Date],103); --Format 103 is the DD/MM/YYYY date format
+--Deleting the field with the dates in VARCHAR
 ALTER TABLE calendar DROP COLUMN [Date];
---Renombrando la nueva columna como la anterior: 'Date'
+--Renaming the new column to the previous one: 'Date'
 EXEC sp_rename 'calendar.ValidDate', 'Date', 'COLUMN';
 
 SELECT * 
 FROM calendar
 
---Visualizando los datos ya insertados en la tabla segments
+--Viewing the data already inserted into the segments table
 SELECT * 
 FROM segments
 
---Visualizando los datos ya insertados en la tabla products
+--Viewing the data already inserted into the products table
 SELECT * 
 FROM products
 
 
-/******************************** LIMPIEZA DE DATOS ********************************/
+/******************************** DATA CLEANING ********************************/
 
---¿Hay valores nulos en las columnas de las tablas? (En category ya sabemos que no hay nulos)
+--Are there null values in the tables' columns? (We already know there are none in category)
 
---Checando valores nulos en segments
+--Checking null values in segments
 SELECT 
     SUM(CASE WHEN [Category] IS NULL THEN 1 ELSE 0 END) AS CategoryNulls,
     SUM(CASE WHEN [Attr1] IS NULL THEN 1 ELSE 0 END) AS Attr1Nulls,
@@ -122,7 +122,7 @@ SELECT
     SUM(CASE WHEN [Segment] IS NULL THEN 1 ELSE 0 END) AS SegmentNulls
 FROM segments;
 
---Checando valores nulos en calendar
+--Checking null values in calendar
 SELECT 
     SUM(CASE WHEN [Week] IS NULL THEN 1 ELSE 0 END) AS WeekNulls,
     SUM(CASE WHEN [Year] IS NULL THEN 1 ELSE 0 END) AS YearNulls,
@@ -131,7 +131,7 @@ SELECT
     SUM(CASE WHEN [Date] IS NULL THEN 1 ELSE 0 END) AS DateNulls
 FROM calendar;
 
---Checando valores nulos en products
+--Checking null values in products
 SELECT 
     SUM(CASE WHEN [Manufacturer] IS NULL THEN 1 ELSE 0 END) AS ManufacturerNulls,
     SUM(CASE WHEN [Brand] IS NULL THEN 1 ELSE 0 END) AS BrandNulls,
@@ -144,7 +144,7 @@ SELECT
     SUM(CASE WHEN [Attr3] IS NULL THEN 1 ELSE 0 END) AS Attr3Nulls
 FROM products;
 
---Checando valores nulos en sales
+--Checking null values in sales
 SELECT 
     SUM(CASE WHEN [Week] IS NULL THEN 1 ELSE 0 END) AS WeekNulls,
     SUM(CASE WHEN [ItemCode] IS NULL THEN 1 ELSE 0 END) AS ItemCodeNulls,
@@ -155,17 +155,17 @@ SELECT
 FROM sales;
 
 
---Tratando los valores nulos
-UPDATE segments --Solo hay un valor nulo en segments en la columna Attr3
+--Handling the null values
+UPDATE segments --There is only one null value in segments, in the Attr3 column
 SET [Attr3] = ISNULL([Attr3], 'NO DEFINIDO');
 
-UPDATE products --Solo hay 12 valores nulos en la tabla products: 6 en Attr1 y 6 en Attr3
+UPDATE products --There are only 12 null values in the products table: 6 in Attr1 and 6 in Attr3
 SET [Attr1] = ISNULL([Attr1], 'NO DEFINIDO'),
     [Attr3] = ISNULL([Attr3], 'NO DEFINIDO');
 
 
---¿Hay duplicados en las tablas?
---Se agruparán los datos tomando en cuenta todas las columnas, y se mostrarán las que aparezcan más de 1 vez
+--Are there duplicates in the tables?
+--The data will be grouped considering all columns, and rows appearing more than once will be shown
 SELECT *, COUNT(*) AS VecesDuplicado
 FROM calendar
 GROUP BY [Week], [Year], [Month], [WeekNumber], [Date] 
@@ -186,63 +186,63 @@ FROM sales
 GROUP BY [Week], [ItemCode], [TotalUnitSales], [TotalValueSales], [TotalUnitAvgWeeklySales], [Region]
 HAVING COUNT(*) > 1;
 
---Solo se encontró un registro duplicado en la tabla segments
-WITH cte_dups AS ( --Creamos un CTE, ya que necesitamos filtrar la columna generada con ROW_NUMBER()
-SELECT *, ROW_NUMBER() OVER( --Particionamos sobre todas las columnas de la tabla segments
+--Only one duplicate record was found, in the segments table
+WITH cte_dups AS ( --Creating a CTE, since we need to filter on the column generated with ROW_NUMBER()
+SELECT *, ROW_NUMBER() OVER( --Partitioning over all columns of the segments table
           PARTITION BY [Category], [Attr1], [Attr2], [Attr3], [Format], [Segment] 
           ORDER BY [Segment]) AS IdDuplicado
 FROM segments
 )
 DELETE FROM cte_dups
-WHERE IdDuplicado > 1; --Eliminamos los que tengan un IdDuplicado > 1, los cuales corresponden a duplicados
+WHERE IdDuplicado > 1; --Deleting the ones with IdDuplicado > 1, which correspond to duplicates
 
 
-/************** Definición de llaves (PRIMARY KEY y FOREIGN KEY) ****************/
---Antes de asignar las "Primary Keys", hay qe asegurarnos que no tengan valores nulos y duplicados.
---(en todas las tabals menos category, porque ya se visualizó que no hay valores duplicados)
+/************** Defining keys (PRIMARY KEY and FOREIGN KEY) ****************/
+--Before assigning the "Primary Keys", we need to make sure there are no null or duplicate values.
+--(in all tables except category, since we already confirmed there are no duplicate values)
 
---Verificando duplicados en solo en los campos que deben de ser primary keys para las tablas:
---calendar (campo Week)
+--Checking for duplicates only in the fields that should be primary keys for the tables:
+--calendar (Week field)
 SELECT [Week], COUNT(*) AS Frecuency
 FROM calendar
 GROUP BY [Week]
 HAVING COUNT(*) > 1;
---segments (campos Category, Attr1, Attr2, Attr3, Format)
+--segments (Category, Attr1, Attr2, Attr3, Format fields)
 SELECT [Category], [Attr1], [Attr2], [Attr3], [Format], COUNT(*) AS Frecuency
 FROM segments
 GROUP BY [Category], [Attr1], [Attr2], [Attr3], [Format]
 HAVING COUNT(*) > 1;
---products (campo Item)
+--products (Item field)
 SELECT [Item], COUNT(*) AS Frecuency
 FROM products
 GROUP BY [Item]
 HAVING COUNT(*) > 1;
 
---¿Hay algún producto en la tabla "sales" que tenga como ItemCode = 'N/A'?
+--Is there any product in the "sales" table with ItemCode = 'N/A'?
 SELECT [ItemCode]
 FROM sales
 WHERE [ItemCode] = 'N/A'
 
---Como no hay ningún producto con ItemCode 'N/A', lo mejor será eliminarlos, ya que no serán de utilizada para Joins
+--Since there is no product with ItemCode 'N/A', it's best to delete them, as they won't be useful for Joins
 DELETE FROM products
 WHERE [Item] = 'N/A';
 
 
---Una vez ya revisado esto, podemos asignar las Primary y Foerign Keys a cada tabla:
+--Once this has been checked, we can assign the Primary and Foreign Keys to each table:
 
---category solo tiene la Primary Key de IdCategory
+--category only has the Primary Key of IdCategory
 ALTER TABLE category
-ALTER COLUMN [IdCategory] TINYINT NOT NULL; --Primero hay que redefinir que no acepte valores nulos
+ALTER COLUMN [IdCategory] TINYINT NOT NULL; --First we need to redefine it so it doesn't accept null values
 ALTER TABLE category
-ADD CONSTRAINT PK_IdCategory PRIMARY KEY CLUSTERED ([IdCategory]); --Asignando la Primary Key
+ADD CONSTRAINT PK_IdCategory PRIMARY KEY CLUSTERED ([IdCategory]); --Assigning the Primary Key
 
---calendar solo tiene la Primary Key de Week
+--calendar only has the Primary Key of Week
 ALTER TABLE calendar
-ALTER COLUMN [Week] VARCHAR(10) NOT NULL; --Primero hay que redefinir que no acepte valores nulos
+ALTER COLUMN [Week] VARCHAR(10) NOT NULL; --First we need to redefine it so it doesn't accept null values
 ALTER TABLE calendar
-ADD CONSTRAINT PK_Week PRIMARY KEY CLUSTERED ([Week]); --Asignando la Primary Key 
+ADD CONSTRAINT PK_Week PRIMARY KEY CLUSTERED ([Week]); --Assigning the Primary Key 
 
---segments tiene una Composite Primary Key conformada por: [Category],[Attr1],[Attr2],[Attr3],[Format]
+--segments has a Composite Primary Key made up of: [Category],[Attr1],[Attr2],[Attr3],[Format]
 ALTER TABLE segments
 ALTER COLUMN [Category] TINYINT NOT NULL; 
 ALTER TABLE segments
@@ -254,75 +254,75 @@ ALTER COLUMN [Attr3] VARCHAR(30) NOT NULL;
 ALTER TABLE segments
 ALTER COLUMN [Format] VARCHAR(30) NOT NULL;
 ALTER TABLE segments
-ADD CONSTRAINT PK_segment PRIMARY KEY ([Category],[Attr1],[Attr2],[Attr3],[Format]); --Asignando la Primary Key 
+ADD CONSTRAINT PK_segment PRIMARY KEY ([Category],[Attr1],[Attr2],[Attr3],[Format]); --Assigning the Primary Key 
 
---products tiene la PK de Item, y dos FK: CAtegory y la compuesta de la tabla segments
+--products has the PK of Item, and two FKs: Category and the composite one from the segments table
 ALTER TABLE products
-ALTER COLUMN [Item] VARCHAR(100) NOT NULL; --Primero hay que redefinir que no acepte valores nulos
+ALTER COLUMN [Item] VARCHAR(100) NOT NULL; --First we need to redefine it so it doesn't accept null values
 ALTER TABLE products
-ADD CONSTRAINT PK_Item PRIMARY KEY CLUSTERED ([Item]); --Asignando la Primary Key 
+ADD CONSTRAINT PK_Item PRIMARY KEY CLUSTERED ([Item]); --Assigning the Primary Key 
 ALTER TABLE products
-ADD CONSTRAINT FK_Category FOREIGN KEY ([Category]) --Asignando la Foreign Key 
-REFERENCES category([IdCategory]); --Hace referencia a la PK de calendar
-ALTER TABLE products --Asignando la Composite Foreign Key
+ADD CONSTRAINT FK_Category FOREIGN KEY ([Category]) --Assigning the Foreign Key 
+REFERENCES category([IdCategory]); --References the PK of calendar
+ALTER TABLE products --Assigning the Composite Foreign Key
 ADD CONSTRAINT FK_segments FOREIGN KEY ([Category],[Attr1],[Attr2],[Attr3],[Format])  
-REFERENCES segments ([Category],[Attr1],[Attr2],[Attr3],[Format]); --Hace referencia a la PK de segments
+REFERENCES segments ([Category],[Attr1],[Attr2],[Attr3],[Format]); --References the PK of segments
 
---sales tiene 2 Foreign Keys: Week e ItemCode
+--sales has 2 Foreign Keys: Week and ItemCode
 ALTER TABLE sales
-ADD CONSTRAINT FK_Week FOREIGN KEY ([Week]) --Asignando la Foreign Key 
-REFERENCES calendar([Week]); --Hace referencia a la PK de calendar
+ADD CONSTRAINT FK_Week FOREIGN KEY ([Week]) --Assigning the Foreign Key 
+REFERENCES calendar([Week]); --References the PK of calendar
 ALTER TABLE sales
-ADD CONSTRAINT FK_Item FOREIGN KEY ([ItemCode]) --Asignando la Foreign Key 
-REFERENCES products([Item]); --Hace referencia a la PK de products
+ADD CONSTRAINT FK_Item FOREIGN KEY ([ItemCode]) --Assigning the Foreign Key 
+REFERENCES products([Item]); --References the PK of products
 
 
-/******************************** JOINS DE TABLAS ********************************/
---Con la base de datos ya completa y preparada, podemos realizar algunos JOINS y generar views con estos
+/******************************** TABLE JOINS ********************************/
+--With the database now complete and prepared, we can perform some JOINS and generate views from them
 CREATE VIEW [Productos Detallados] AS
 SELECT p.[Item], p.[Manufacturer], p.[Brand], p.[ItemDescription], 
-       c.[Category], s.[Format], s.[Segment], s.[Attr1], s.[Attr2], s.[Attr3] --Campos a visualzar
+       c.[Category], s.[Format], s.[Segment], s.[Attr1], s.[Attr2], s.[Attr3] --Fields to display
 FROM products AS p
-    INNER JOIN category AS c ON c.[IdCategory] = p.[Category] --Haciendo un Inner Join utilizando la identificador de categoría (PK IdCategory)
+    INNER JOIN category AS c ON c.[IdCategory] = p.[Category] --Performing an Inner Join using the category identifier (PK IdCategory)
     INNER JOIN segments AS s ON p.[Category] = s.[Category] AND p.[Attr1] = s.[Attr1] AND
                                 p.[Attr2] = s.[Attr2] AND p.[Attr3] = s.[Attr3] AND
-                                p.[Format] = s.[Format]; --Haciendo un Inner Join utilizando la composite PK para obtener los segmentos de los productos
---Visualizando el view creado
+                                p.[Format] = s.[Format]; --Performing an Inner Join using the composite PK to obtain the products' segments
+--Viewing the created view
 SELECT *
 FROM [Productos Detallados];
 
 CREATE VIEW [Ventas con Fechas] AS
 SELECT ca.[Date], sa.[ItemCode], sa.[TotalUnitSales], 
-       sa.[TotalValueSales], sa.[TotalUnitAvgWeeklySales], sa.[Region] --Campos a visualzar
+       sa.[TotalValueSales], sa.[TotalUnitAvgWeeklySales], sa.[Region] --Fields to display
 FROM sales AS sa
-    INNER JOIN calendar AS ca ON ca.[Week] = sa.[Week]; --Haciendo un Inner Join utilizando la identificador de la semana (PK Week)
---Visualizando el view creado
+    INNER JOIN calendar AS ca ON ca.[Week] = sa.[Week]; --Performing an Inner Join using the week identifier (PK Week)
+--Viewing the created view
 SELECT *
 FROM [Ventas con Fechas];
 
---Para el siguiente Join, usaremos los dos views creados anteriormente y los juntaremos en uno solo
+--For the next Join, we will use the two views created previously and combine them into a single one
 CREATE VIEW [Datos Completos] AS
 SELECT vf.[Date], vf.[ItemCode], pd.[ItemDescription], vf.[TotalUnitSales], 
        vf.[TotalValueSales], vf.[TotalUnitAvgWeeklySales], vf.[Region],
        pd.[Manufacturer], pd.[Brand], pd.[Category], pd.[Format], 
-       pd.[Segment], pd.[Attr1], pd.[Attr2], pd.[Attr3] --Campos a visualzar
+       pd.[Segment], pd.[Attr1], pd.[Attr2], pd.[Attr3] --Fields to display
 FROM [Productos Detallados] AS pd
-    INNER JOIN [Ventas con Fechas] AS vf ON pd.[Item] = vf.[ItemCode]; --Haciendo un Inner Join utilizando la código de producto (PK Item)
---Visualizando el view creado
+    INNER JOIN [Ventas con Fechas] AS vf ON pd.[Item] = vf.[ItemCode]; --Performing an Inner Join using the product code (PK Item)
+--Viewing the created view
 SELECT *
 FROM [Datos Completos];
 
-/******************************** INSIGHTS RELEVANTES ********************************/
+/******************************** KEY INSIGHTS ********************************/
 /*
-A continuación, se presentarán múltiples consultas a la base de datos recién creada, con el objetivo
-de obtener insights clave de las ventas. Para ello, se calcularán estadísticas de venta, definidas como:
+Below, multiple queries will be presented against the newly created database, with the goal
+of obtaining key sales insights. To do this, sales statistics will be calculated, defined as:
 
-Estadísticas de venta: El número de ventas (frecuencia de registros), el promedio de las las ventas 
-unitarias (TotalUnitSales) y del rendimiento histórico de las ventas (TotalUnitAvgWeeklySales), 
-así como el promedio y la suma total de las ventas monetarias totales (TotalValueSales)
+Sales statistics: The number of sales (record frequency), the average unit sales 
+(TotalUnitSales) and the historical sales performance (TotalUnitAvgWeeklySales), 
+as well as the average and total sum of total monetary sales (TotalValueSales)
 */
 
---Calculando las estadísticas de venta por segmento (Segment)
+--Calculating sales statistics by segment (Segment)
 SELECT [Segment], 
        COUNT(*) AS Frecuencia, 
        AVG(TotalUnitSales) AS AvgUnitSales,
@@ -333,7 +333,7 @@ FROM [Datos Completos]
 GROUP BY [Segment]
 ORDER BY AVG(TotalValueSales) DESC;
 
---Calculando las estadísticas de venta por formato (Format)
+--Calculating sales statistics by format (Format)
 SELECT [Format], 
        COUNT(*) AS Frecuencia, 
        AVG(TotalUnitSales) AS AvgUnitSales,
@@ -344,7 +344,7 @@ FROM [Datos Completos]
 GROUP BY [Format]
 ORDER BY AVG(TotalValueSales) DESC;
 
---Calculando las estadísticas de venta por región (Region)
+--Calculating sales statistics by region (Region)
 SELECT [Region], 
        COUNT(*) AS Frecuencia, 
        AVG(TotalUnitSales) AS AvgUnitSales,
@@ -355,7 +355,7 @@ FROM [Datos Completos]
 GROUP BY [Region]
 ORDER BY AVG(TotalUnitSales) DESC;
 
---Calculando las estadísticas de venta por marca (Brand). Dado que hay muchas marcas, solo se mostrará el Top 5 mejores.
+--Calculating sales statistics by brand (Brand). Since there are many brands, only the Top 5 best will be shown.
 SELECT TOP(5) [Brand], 
        COUNT(*) AS Frecuencia, 
        AVG(TotalUnitSales) AS AvgUnitSales,
@@ -366,8 +366,8 @@ FROM [Datos Completos]
 GROUP BY [Brand]
 ORDER BY AVG(TotalValueSales) DESC; 
 
---Supongamos que queremos saber en qué lugar se encuentra Lysol en el ranking de las marcas según sus ventas promedio
-WITH cte AS ( --Si no se realiza un CTE, el ranking no funciona correctamente
+--Let's say we want to know where Lysol ranks among brands by average sales
+WITH cte AS ( --If a CTE is not used, the ranking won't work correctly
 SELECT [Brand], 
        COUNT(*) AS Frecuencia, 
        AVG(TotalUnitSales) AS AvgUnitSales,
@@ -384,8 +384,8 @@ FROM cte
 WHERE [Brand] = 'LYSOL';
 
 
---AGRUPACIONES MÚLTIPLES
---Calculando las estadísticas de venta por Región y Segmento
+--MULTIPLE GROUPINGS
+--Calculating sales statistics by Region and Segment
 SELECT TOP (10)
        [Region],
        [Segment], 
@@ -398,7 +398,7 @@ FROM [Datos Completos]
 GROUP BY [Region], [Segment]
 ORDER BY AVG(TotalValueSales) DESC;
 
---Calculando las estadísticas de venta por Segemento y Formato
+--Calculating sales statistics by Segment and Format
 SELECT TOP (10)
        [Segment],
        [Format], 
@@ -411,14 +411,14 @@ FROM [Datos Completos]
 GROUP BY [Segment], [Format]
 ORDER BY AVG(TotalValueSales) DESC;
 
---CONSULTAS MÁS ELABORADAS
+--MORE ELABORATE QUERIES
 
 /*
-Mostrando el mejor producto de cada marca, mostrando sus estadisticas de ventas. Para solo desplegar información importante,
-solamente se seleccionarán los productos de las marcas Vanish y Lysol (las marcas de interés) y las otras marcas del TOP 5 mejores ventas
-(BLANCATEL,CLORALEX,CLOROX,CLARASOL)
+Showing the best-selling product of each brand, showing its sales statistics. To display only
+important information, only products from the Vanish and Lysol brands (the brands of interest) and the
+other Top 5 best-selling brands (BLANCATEL,CLORALEX,CLOROX,CLARASOL) will be selected
 */
-WITH cte_items AS ( --CTE con las estadísticas de ventas de cada producto
+WITH cte_items AS ( --CTE with the sales statistics for each product
     SELECT [Brand],
            [ItemDescription],
            [Segment], 
@@ -429,33 +429,33 @@ WITH cte_items AS ( --CTE con las estadísticas de ventas de cada producto
     FROM [Datos Completos]
     GROUP BY [Brand],[ItemDescription],[Segment]
 ),
-cte_ranked AS ( --Realizando otro CTE para poder aplicar un RANK particionado por marca, ya que después se utilziará esta nueva columna
+cte_ranked AS ( --Creating another CTE in order to apply a RANK partitioned by brand, since this new column will be used afterward
     SELECT *,
            RANK() OVER(PARTITION BY [Brand] ORDER BY AvgValueSales DESC) AS RankBrand
     FROM cte_items
 )
 SELECT *
-FROM cte_ranked --Se seleccioanrá solo el mejor producto por marca (RankBrand = 1) solo de las marcas correspondientes
+FROM cte_ranked --Only the best product per brand will be selected (RankBrand = 1), and only for the corresponding brands
 WHERE RankBrand = 1 AND [Brand] IN ('VANISH','LYSOL','BLANCATEL','CLORALEX','CLOROX','CLARASOL')
 ORDER BY AvgValueSales DESC;
 
 /*
-Vamos a utilizar las fechas para crear una categoría con fechas según el trimestre al que correspondan
-La división trimestral estándar corporativa está definida como:
-- Q1: Ene-Mar
-- Q2: Abr-Jun
+We are going to use the dates to create a category based on the quarter they correspond to
+The standard corporate quarterly division is defined as:
+- Q1: Jan-Mar
+- Q2: Apr-Jun
 - Q3: Jul-Sep
-- Q4: Oct-Dic
+- Q4: Oct-Dec
 */
 
---Necesitamos saber primero cuál es el rango de fechas disponibles
+--First we need to know the range of available dates
 SELECT MIN([Date]) AS FechaMin, MAX([Date]) AS FechaMax
-FROM [Datos Completos]; --Las fechas aparecerán en formato YYYY-MM-DD
+FROM [Datos Completos]; --The dates will appear in YYYY-MM-DD format
 
 /*
-Podemos ver que tenemos ventas del 9 de Enero del 2022 al 17 de Julio del 2023, por lo que podemos
-dividir las ventas del del Q1 de 2022 al Q3 de 2023. A continuación, se agruparán las ventas por 
-trimestres y se mostrarán sus estadísticas de ventas
+We can see that we have sales from January 9, 2022 to July 17, 2023, so we can
+divide the sales from Q1 2022 to Q3 2023. Next, sales will be grouped by
+quarter and their sales statistics will be shown
 */
 WITH cte_trimesters AS (
 SELECT *, 
